@@ -2,143 +2,212 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1o9GlkPYB6tQmgR0aWoibLsJeZrDZh8pS">
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Montserrat:wght@100;300;600;900&display=swap" rel="stylesheet">
-    
-    <title>HUMAN RIGHTS & HUMAN RIGHTS-BASED POLICING HRMC exam | SESSION TERMINATED</title>
-    <style>
-        :root {
-            --admin-red: #ff3c3c;
-            --bg-ultra: #020203;
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUMAN RIGHTS & HUMAN RIGHTS-BASED POLICING HRMC exam</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        police: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            500: '#102a43',
+                            600: '#0b1b2b',
+                            700: '#08131e',
+                            gold: '#d4af37'
+                        }
+                    }
+                }
+            }
         }
-
-        body, html { 
-            margin: 0; padding: 0; height: 100%; width: 100%; 
-            background: var(--bg-ultra); color: #fff;
-            font-family: 'Montserrat', sans-serif; 
-            display: flex; justify-content: center; align-items: center;
+    </script>
+    <style>
+        /* Custom scrollbars and full-height utility adjustments */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
         }
-
-        /* --- TERMINATED CHASSIS --- */
-        .info-container {
-            width: 85%;
-            max-width: 550px;
-            padding: 40px;
-            text-align: center;
-            border: 1px solid rgba(255, 60, 60, 0.15);
-            background: linear-gradient(145deg, #050505 0%, #000000 100%);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            position: relative;
+        .iframe-container {
+            height: calc(100vh - 73px);
         }
-
-        .info-container::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: var(--admin-red);
-        }
-
-        .brand-logo { 
-            width: 70px; 
-            margin-bottom: 25px; 
-            filter: grayscale(1) brightness(1.5);
-            opacity: 0.7;
-        }
-
-        h1 { 
-            font-size: 13px; 
-            letter-spacing: 6px; 
-            color: var(--admin-red); 
-            text-transform: uppercase; 
-            margin-bottom: 20px;
-            font-weight: 900;
-        }
-
-        .message { 
-            font-size: 11px; 
-            line-height: 2; 
-            color: #777; 
-            margin-bottom: 40px; 
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .message b { color: #aaa; }
-
-        .action-area {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .btn-exit {
-            padding: 12px 35px;
-            border: 1px solid #222;
-            color: #666;
-            text-decoration: none;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 11px;
-            transition: 0.4s;
-            letter-spacing: 2px;
-        }
-
-        .btn-exit:hover {
-            border-color: var(--admin-red);
-            color: #fff;
-            background: rgba(255, 60, 60, 0.05);
-        }
-
-        .status-footer {
-            position: absolute;
-            bottom: -60px;
-            left: 0;
-            width: 100%;
-            font-family: 'Share Tech Mono';
-            font-size: 10px;
-            color: #333;
-            letter-spacing: 3px;
-        }
-
-        /* Scanline Effect */
-        .info-container::after {
-            content: " ";
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 2;
-            background-size: 100% 4px, 3px 100%;
-            pointer-events: none;
+        @media (max-width: 640px) {
+            .iframe-container {
+                height: calc(100vh - 65px);
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen transition-colors duration-200 font-sans">
 
-    <div class="info-container">
-        <img src="https://lh3.googleusercontent.com/d/1o9GlkPYB6tQmgR0aWoibLsJeZrDZh8pS" class="brand-logo" alt="Logo">
+    <!-- Top Header / Navigation Bar -->
+    <header class="bg-police-500 dark:bg-gray-800 text-white shadow-md border-b-2 border-police-gold relative z-10 transition-colors duration-200">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-18">
+                
+                <!-- Logo & Title Section -->
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <!-- Custom Logo with fallback image support -->
+                    <div class="flex-shrink-0 relative">
+                        <img 
+                            src="https://lh3.googleusercontent.com/d/1o9GlkPYB6tQmgR0aWoibLsJeZrDZh8pS" 
+                            alt="HRMC Logo" 
+                            class="h-10 w-10 sm:h-12 sm:w-12 object-contain rounded-full bg-white p-0.5 shadow-sm border border-police-gold"
+                            onerror="this.onerror=null; this.src='https://placehold.co/100x100/102a43/ffffff?text=HRMC';"
+                        >
+                    </div>
+                    
+                    <!-- Title Text -->
+                    <div class="flex flex-col">
+                        <h1 class="text-xs sm:text-base md:text-lg font-bold tracking-tight text-white leading-tight">
+                            HUMAN RIGHTS & HUMAN RIGHTS-BASED POLICING
+                        </h1>
+                        <span class="text-xs font-medium text-amber-400 tracking-wide uppercase">
+                            HRMC Exam Portal
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <!-- Reload Exam Button -->
+                    <button 
+                        onclick="reloadIframe()" 
+                        title="Reload Exam"
+                        class="p-2 rounded-lg bg-police-600 hover:bg-police-700 text-gray-200 hover:text-white transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-amber-400 text-xs sm:text-sm flex items-center space-x-1"
+                    >
+                        <i class="fa-solid fa-rotate-right" id="refresh-icon"></i>
+                        <span class="hidden md:inline">Refresh</span>
+                    </button>
+
+                    <!-- Toggle Fullscreen Button -->
+                    <button 
+                        onclick="toggleFullscreen()" 
+                        title="Toggle Fullscreen"
+                        class="p-2 rounded-lg bg-police-600 hover:bg-police-700 text-gray-200 hover:text-white transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-amber-400 text-xs sm:text-sm flex items-center space-x-1"
+                    >
+                        <i class="fa-solid fa-expand" id="fullscreen-icon"></i>
+                        <span class="hidden md:inline">Fullscreen</span>
+                    </button>
+
+                    <!-- Dark/Light Theme Toggle -->
+                    <button 
+                        onclick="toggleTheme()" 
+                        title="Toggle Dark/Light Mode"
+                        class="p-2 rounded-lg bg-police-600 hover:bg-police-700 text-gray-200 hover:text-white transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-amber-400 text-xs sm:text-sm"
+                    >
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline text-amber-300"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Full-Screen Frame Area -->
+    <main class="flex-grow w-full relative bg-gray-200 dark:bg-gray-950 iframe-container">
         
-        <h1>System Session Closed</h1>
-        
-        <div class="message">
-            The <b>Executive Assessment Console</b> has been disconnected. <br>
-            All administrative tokens have been revoked. <br>
-            Access is now restricted to <b>Level 4 Personnel</b> only.
+        <!-- Loading Overlay Animation -->
+        <div id="loader" class="absolute inset-0 z-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 transition-opacity duration-300">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-police-500 border-t-transparent dark:border-amber-400 dark:border-t-transparent mb-3"></div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-300 animate-pulse">Loading HRMC Exam Portal...</p>
         </div>
 
-        <div class="action-area">
-            <a href="https://script.google.com/macros/s/AKfycbxagCNX3mLBwVUc-EiRncQ1N4MXlCZUqSpp30GY8HhuPmimiSHILY48NY65Zjp2IcbS/exec" class="btn-exit">RETURN TO LOGIN</a>
-        </div>
-
-        <div class="status-footer">
-            NODE: SECURE_09 // STATUS: TERMINATED
-        </div>
-    </div>
+        <!-- Embedded Web App / Exam Frame -->
+        <iframe 
+            id="exam-iframe"
+            src="https://script.google.com/macros/s/AKfycbxagCNX3mLBwVUc-EiRncQ1N4MXlCZUqSpp30GY8HhuPmimiSHILY48NY65Zjp2IcbS/exec" 
+            class="w-full h-full border-0 relative z-10"
+            allow="fullscreen; geolocation; microphone; camera"
+            onload="hideLoader()"
+        ></iframe>
+    </main>
 
     <script>
-        // Simple log for audit trail
-        console.log("Session manually closed at: " + new Date().toISOString());
+        
+        // Hide loader once the iframe finishes loading
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        // Reload iframe content
+        function reloadIframe() {
+            const iframe = document.getElementById('exam-iframe');
+            const loader = document.getElementById('loader');
+            const icon = document.getElementById('refresh-icon');
+
+            if (icon) icon.classList.add('fa-spin');
+            if (loader) {
+                loader.style.display = 'flex';
+                loader.style.opacity = '1';
+            }
+
+            iframe.src = iframe.src;
+
+            setTimeout(() => {
+                if (icon) icon.classList.remove('fa-spin');
+            }, 1000);
+        }
+
+        // Toggle Theme
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Check user's preferred theme on startup
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Toggle Fullscreen Mode
+        function toggleFullscreen() {
+            const icon = document.getElementById('fullscreen-icon');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    if (icon) {
+                        icon.classList.remove('fa-expand');
+                        icon.classList.add('fa-compress');
+                    }
+                }).catch(err => {
+                    console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        if (icon) {
+                            icon.classList.remove('fa-compress');
+                            icon.classList.add('fa-expand');
+                        }
+                    });
+                }
+            }
+        }
     </script>
 </body>
 </html>

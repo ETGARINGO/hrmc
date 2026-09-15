@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1o9GlkPYB6tQmgR0aWoibLsJeZrDZh8pS">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Montserrat:wght@100;300;600;900&display=swap" rel="stylesheet">
+    
+    <title>HUMAN RIGHTS & HUMAN RIGHTS-BASED POLICING HRMC exam | SESSION TERMINATED</title>
+    <style>
+        :root {
+            --admin-red: #ff3c3c;
+            --bg-ultra: #020203;
+        }
+
+        body, html { 
+            margin: 0; padding: 0; height: 100%; width: 100%; 
+            background: var(--bg-ultra); color: #fff;
+            font-family: 'Montserrat', sans-serif; 
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- TERMINATED CHASSIS --- */
+        .info-container {
+            width: 85%;
+            max-width: 550px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 60, 60, 0.15);
+            background: linear-gradient(145deg, #050505 0%, #000000 100%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .info-container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--admin-red);
+        }
+
+        .brand-logo { 
+            width: 70px; 
+            margin-bottom: 25px; 
+            filter: grayscale(1) brightness(1.5);
+            opacity: 0.7;
+        }
+
+        h1 { 
+            font-size: 13px; 
+            letter-spacing: 6px; 
+            color: var(--admin-red); 
+            text-transform: uppercase; 
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .message { 
+            font-size: 11px; 
+            line-height: 2; 
+            color: #777; 
+            margin-bottom: 40px; 
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .message b { color: #aaa; }
+
+        .action-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-exit {
+            padding: 12px 35px;
+            border: 1px solid #222;
+            color: #666;
+            text-decoration: none;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            transition: 0.4s;
+            letter-spacing: 2px;
+        }
+
+        .btn-exit:hover {
+            border-color: var(--admin-red);
+            color: #fff;
+            background: rgba(255, 60, 60, 0.05);
+        }
+
+        .status-footer {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            width: 100%;
+            font-family: 'Share Tech Mono';
+            font-size: 10px;
+            color: #333;
+            letter-spacing: 3px;
+        }
+
+        /* Scanline Effect */
+        .info-container::after {
+            content: " ";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 2;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="info-container">
+        <img src="https://lh3.googleusercontent.com/d/1o9GlkPYB6tQmgR0aWoibLsJeZrDZh8pS" class="brand-logo" alt="Logo">
+        
+        <h1>System Session Closed</h1>
+        
+        <div class="message">
+            The <b>Executive Assessment Console</b> has been disconnected. <br>
+            All administrative tokens have been revoked. <br>
+            Access is now restricted to <b>Level 4 Personnel</b> only.
+        </div>
+
+        <div class="action-area">
+            <a href="https://script.google.com/macros/s/AKfycbxagCNX3mLBwVUc-EiRncQ1N4MXlCZUqSpp30GY8HhuPmimiSHILY48NY65Zjp2IcbS/exec" class="btn-exit">RETURN TO LOGIN</a>
+        </div>
+
+        <div class="status-footer">
+            NODE: SECURE_09 // STATUS: TERMINATED
+        </div>
+    </div>
+
+    <script>
+        // Simple log for audit trail
+        console.log("Session manually closed at: " + new Date().toISOString());
+    </script>
+</body>
+</html>

@@ -6,70 +6,62 @@
     <title>HRMSC | Official Shirt Order Form</title>
     
     <link rel="icon" type="image/png" href="PIN.png">
+    <!-- Google Fonts for crisp typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --corporate-navy: #0f172a;
             --corporate-slate: #1e293b;
+            --corporate-slate-light: #334155;
             --corporate-blue: #0284c7;
+            --corporate-blue-hover: #0ea5e9;
             --accent-gold: #d97706;
             --gcash-blue: #007DF4;
+            --success-green: #10b981;
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
-            --glass-bg: rgba(30, 41, 59, 0.95);
-            --border-subtle: rgba(148, 163, 184, 0.2);
-            --shadow-elevation: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            --glass-bg: rgba(30, 41, 59, 0.85);
+            --border-subtle: rgba(148, 163, 184, 0.15);
+            --shadow-elevation: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0; 
+            padding: 0;
         }
 
         body, html { 
-            margin: 0; padding: 0; height: 100%; width: 100%; 
-            overflow: hidden; background-color: var(--corporate-navy); 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: var(--corporate-navy); 
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text-light);
             user-select: none;
             -webkit-user-select: none;
         }
 
-        /* CLEAN CORPORATE HEADER */
-        #corporate-header {
-            position: absolute; top: 0; left: 0; width: 100%; height: 65px;
-            background: var(--corporate-slate);
-            border-bottom: 1px solid var(--border-subtle);
-            display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
-            z-index: 1100; box-sizing: border-box;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .header-brand { display: flex; align-items: center; overflow: hidden; }
-        #header-logo { height: 38px; margin-right: 12px; border-radius: 6px; flex-shrink: 0; }
-        .header-text-container { display: flex; flex-direction: column; overflow: hidden; }
-        #header-title { font-weight: 700; letter-spacing: 0.5px; font-size: 13px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        #header-subtitle { font-size: 10px; color: var(--text-muted); margin-top: 1px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-
-        .header-badge {
-            background: rgba(2, 132, 199, 0.15);
-            color: #38bdf8;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            flex-shrink: 0;
-            display: none;
+        /* BACKGROUND LOGO BLEND */
+        #logo-blend-bg {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            object-fit: cover; 
+            z-index: 0; 
+            opacity: 0.04;
+            mix-blend-mode: luminosity; 
+            pointer-events: none;
         }
 
-        @media (min-width: 600px) {
-            .header-badge { display: block; }
-            #corporate-header { padding: 0 30px; height: 70px; }
-            #header-title { font-size: 15px; }
-        }
-
-        /* ASSISTED TOUCH / DRAGGABLE GCASH FLOATING WIDGET */
+        /* FLOATING GCASH WIDGET */
         #gcash-float-banner {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 25px;
+            right: 25px;
             z-index: 4000;
             background: linear-gradient(135deg, #0056b3, var(--gcash-blue));
             color: #fff;
@@ -79,7 +71,7 @@
             display: flex; 
             align-items: center; 
             gap: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             font-size: 12px; 
             font-weight: 600;
             cursor: grab;
@@ -96,10 +88,15 @@
         .gcash-icon {
             background: #fff; 
             color: var(--gcash-blue);
-            width: 26px; height: 26px; 
+            width: 28px; 
+            height: 28px; 
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 12px; flex-shrink: 0;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-weight: 900; 
+            font-size: 13px; 
+            flex-shrink: 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
@@ -112,43 +109,59 @@
         }
 
         .drag-handle-dots span {
-            width: 3px; height: 3px;
+            width: 3px; 
+            height: 3px;
             background: #fff;
             border-radius: 50%;
         }
 
+        /* ARCHIVE TOGGLE BUTTON */
         #folder-toggle-btn {
-            position: fixed; right: 15px; top: 78px; z-index: 2000;
+            position: fixed; 
+            right: 20px; 
+            top: 20px; 
+            z-index: 2000;
             background: var(--corporate-slate);
             border: 1px solid var(--border-subtle);
             color: var(--text-light);
-            padding: 6px 12px; cursor: pointer;
-            font-family: inherit; font-size: 10px; font-weight: 600;
-            border-radius: 6px;
+            padding: 8px 14px; 
+            cursor: pointer;
+            font-family: inherit; 
+            font-size: 10px; 
+            font-weight: 700;
+            border-radius: 8px;
             box-shadow: var(--shadow-elevation);
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        #folder-toggle-btn:hover { background: var(--corporate-blue); border-color: var(--corporate-blue); }
+        #folder-toggle-btn:hover { 
+            background: var(--corporate-blue); 
+            border-color: var(--corporate-blue);
+            transform: translateY(-1px);
+        }
 
+        /* COMMAND INTERFACE & GRID LAYOUT */
         #command-interface {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1200; display: block; opacity: 1;
-            background-color: var(--corporate-navy);
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            z-index: 100; 
+            display: block; 
         }
 
-        #logo-blend-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 1; opacity: 0.05;
-            mix-blend-mode: luminosity; pointer-events: none;
-        }
-
-        /* Mobile First Layout */
         .viewport-grid {
-            position: absolute; top: 78px; left: 2%; width: 96%; height: calc(100% - 95px);
+            position: absolute; 
+            top: 15px; 
+            left: 15px; 
+            width: calc(100% - 30px); 
+            height: calc(100% - 30px);
             display: grid; 
             grid-template-columns: 1fr 0fr;
-            gap: 0; z-index: 10;
+            gap: 0; 
+            z-index: 10;
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -158,90 +171,252 @@
         }
 
         .pane {
-            display: flex; flex-direction: column;
+            display: flex; 
+            flex-direction: column;
             border: 1px solid var(--border-subtle);
             background: var(--glass-bg); 
-            border-radius: 10px; overflow: hidden;
+            border-radius: 12px; 
+            overflow: hidden;
             box-shadow: var(--shadow-elevation);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        #folder-pane { transform-origin: right; opacity: 0; transform: scaleX(0); pointer-events: none; }
+        #folder-pane { 
+            transform-origin: right; 
+            opacity: 0; 
+            transform: scaleX(0); 
+            pointer-events: none; 
+        }
+        
         .show-archive #folder-pane {
-            opacity: 1; transform: scaleX(1); pointer-events: auto;
+            opacity: 1; 
+            transform: scaleX(1); 
+            pointer-events: auto;
         }
 
         .pane-header {
-            background: rgba(30, 41, 59, 0.95); padding: 10px 15px;
-            font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-light);
+            background: rgba(15, 23, 42, 0.95); 
+            padding: 12px 18px;
+            font-size: 10px; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            color: var(--text-light);
             border-bottom: 1px solid var(--border-subtle);
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
         }
 
         .sync-indicator {
-            font-size: 9px; color: #38bdf8; font-weight: 500;
-            display: flex; align-items: center; gap: 4px;
+            font-size: 9px; 
+            color: #38bdf8; 
+            font-weight: 600;
+            display: flex; 
+            align-items: center; 
+            gap: 5px;
         }
 
         .view-toggle-btn {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
-            color: #38bdf8; padding: 3px 8px; font-size: 9px; font-weight: 600;
-            border-radius: 4px; cursor: pointer; transition: all 0.2s;
+            color: #38bdf8; 
+            padding: 4px 10px; 
+            font-size: 9px; 
+            font-weight: 600;
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: all 0.2s;
         }
         .view-toggle-btn:hover { background: #38bdf8; color: #0f172a; }
 
-        iframe { width: 100%; height: 100%; border: none; background: transparent; }
+        .iframe-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.5);
+        }
 
-        /* Tablet & Desktop Layout Adjustment */
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            background: transparent; 
+        }
+
+        /* LOADING SKELETON */
+        .iframe-loader {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--corporate-slate);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            z-index: 5;
+            transition: opacity 0.3s ease;
+        }
+        .spinner {
+            width: 24px; height: 24px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--corporate-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* TOAST NOTIFICATION */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--corporate-slate);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-elevation);
+            z-index: 5000;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* GCASH QUICK MODAL */
+        #gcash-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 4500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #gcash-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .gcash-modal-card {
+            background: var(--corporate-slate);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 25px;
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: var(--shadow-elevation);
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #gcash-modal.active .gcash-modal-card {
+            transform: scale(1);
+        }
+
+        /* DESKTOP LAYOUT ADJUSTMENTS */
         @media (min-width: 900px) {
-            .viewport-grid { top: 95px; height: 82%; grid-template-columns: 1fr 1fr; gap: 20px; }
-            .viewport-grid.hide-archive { grid-template-columns: 1fr 0fr; gap: 0; }
-            #folder-pane { opacity: 1; transform: scaleX(1); pointer-events: auto; }
-            .viewport-grid.hide-archive #folder-pane { opacity: 0; transform: scaleX(0); pointer-events: none; }
-            #folder-toggle-btn { right: 30px; top: 90px; padding: 10px 16px; font-size: 11px; }
+            .viewport-grid { 
+                top: 20px; 
+                left: 20px;
+                width: calc(100% - 40px);
+                height: calc(100% - 40px); 
+                grid-template-columns: 1fr 1fr; 
+                gap: 20px; 
+            }
+            .viewport-grid.hide-archive { 
+                grid-template-columns: 1fr 0fr; 
+                gap: 0; 
+            }
+            #folder-pane { 
+                opacity: 1; 
+                transform: scaleX(1); 
+                pointer-events: auto; 
+            }
+            .viewport-grid.hide-archive #folder-pane { 
+                opacity: 0; 
+                transform: scaleX(0); 
+                pointer-events: none; 
+            }
+            #folder-toggle-btn { 
+                right: 30px; 
+                top: 30px; 
+                padding: 10px 16px; 
+                font-size: 11px; 
+            }
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <header id="corporate-header">
-        <div class="header-brand">
-            <img src="PIN.png" id="header-logo" alt="HRMSC">
-            <div class="header-text-container">
-                <div id="header-title">HRMSC | OFFICIAL SHIRT ORDER FORM</div>
-                <div id="header-subtitle">Human Resource Management & Course Portal</div>
-            </div>
-        </div>
-        <div class="header-badge">Enterprise Portal v4.2</div>
-    </header>
+    <img src="BLEND.png" id="logo-blend-bg" alt="Background">
 
-    <!-- ASSISTED TOUCH MOVABLE GCASH PAYMENT WIDGET -->
-    <div id="gcash-float-banner">
+    <!-- FLOATING GCASH PAYMENT WIDGET -->
+    <div id="gcash-float-banner" onclick="openGcashModal()" title="Click to view GCash Details">
         <div class="gcash-icon">G</div>
         <div>
-            <div style="font-size: 9px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">GCASH PAYMENT (IBUMAAA)</div>
+            <div style="font-size: 9px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px;">GCASH (IBUMAAA)</div>
             <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.5px;">0963-457-9441</div>
         </div>
-        <div class="drag-handle-dots">
+        <div class="drag-handle-dots" title="Drag to reposition">
             <span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <!-- GCash Quick Info Modal -->
+    <div id="gcash-modal" onclick="closeGcashModal(event)">
+        <div class="gcash-modal-card" onclick="event.stopPropagation()">
+            <div style="width: 48px; height: 48px; background: var(--gcash-blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; margin: 0 auto 15px auto; box-shadow: 0 4px 12px rgba(0,125,244,0.4);">G</div>
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Official GCash Account</h3>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 20px;">Use this account for all official HRMSC shirt order payments.</p>
+            
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Account Name</div>
+                <div style="font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 6px;">IBUMAAA</div>
+                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Mobile Number</div>
+                <div id="gcash-num-text" style="font-size: 16px; font-weight: 800; color: #38bdf8; letter-spacing: 0.5px;">0963-457-9441</div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button onclick="copyGcashNumber()" style="flex: 1; background: var(--corporate-blue); color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; transition: background 0.2s;">Copy Number</button>
+                <button onclick="closeGcashModal()" style="background: var(--corporate-slate-light); color: var(--text-light); border: none; padding: 10px 16px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">Close</button>
+            </div>
         </div>
     </div>
 
     <button id="folder-toggle-btn" onclick="toggleFolder()">[ ARCHIVE: SHOW ]</button>
 
     <div id="command-interface">
-        <img src="BLEND.png" id="logo-blend-bg" alt="Background">
-        
         <div class="viewport-grid" id="main-grid">
-            <!-- SHIRT ORDER FORM PANE (DEFAULT FULL VIEW) -->
+            
+            <!-- SHIRT ORDER FORM PANE -->
             <div class="pane" id="input-pane">
                 <div class="pane-header">
                     <span>PORTAL: SHIRT ORDER FORM & PAYMENT UPLINK</span>
-                    <span style="color: #34d399; font-size: 9px;">● SECURE</span>
+                    <span style="color: var(--success-green); font-size: 9px; display: flex; align-items: center; gap: 4px;">● SECURE</span>
                 </div>
-                <iframe id="order-frame" src="about:blank"></iframe>
+                <div class="iframe-wrapper">
+                    <div class="iframe-loader" id="order-loader">
+                        <div class="spinner"></div>
+                        <span>LOADING ORDER FORM...</span>
+                    </div>
+                    <iframe id="order-frame" src="about:blank" onload="hideLoader('order-loader')"></iframe>
+                </div>
             </div>
 
             <!-- ARCHIVE PANE (TOGGLEABLE) -->
@@ -251,15 +426,28 @@
                     <span class="sync-indicator" id="sync-icon"><span>●</span> LIVE SYNC</span>
                     <button class="view-toggle-btn" onclick="toggleView()">TOGGLE VIEW</button>
                 </div>
-                <iframe id="folder-frame" src="about:blank"></iframe>
+                <div class="iframe-wrapper">
+                    <div class="iframe-loader" id="folder-loader">
+                        <div class="spinner"></div>
+                        <span>LOADING ARCHIVE...</span>
+                    </div>
+                    <iframe id="folder-frame" src="about:blank" onload="hideLoader('folder-loader')"></iframe>
+                </div>
             </div>
+
         </div>
     </div>
 
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast">
+        <span id="toast-icon">✓</span>
+        <span id="toast-msg">Action successful</span>
+    </div>
+
     <script>
-        const GOOGLE_UPLINK = "https://script.google.com/macros/s/AKfycbyGKF5w3DeyNgy7VsQra02txkyci1I1EMekXqpVRXk6MaPAvOKlww1FblCIjDrYWILiQQ/exec";
+        const GOOGLE_UPLINK = "https://script.google.com/macros/s/AKfycbz-hXlKJ0apWmd9NL01JYEVnaapU_5pmZtV236ZRMp5EK9fCHLqxXswks9aXVU3iA/exec";
         const DRIVE_FOLDER_ID = "1E5z6QNMmJFtM2xut38Ohul3PXZzCNFZy";
-        const REFRESH_RATE = 30000;
+        const REFRESH_RATE = 30000; // 30 seconds
         
         let currentView = "grid"; 
         const getEmbedURL = (mode) => `https://drive.google.com/embeddedfolderview?id=${DRIVE_FOLDER_ID}#${mode}`;
@@ -270,6 +458,14 @@
             refreshFolder();
             setInterval(refreshFolder, REFRESH_RATE);
             initDraggableGcash();
+        }
+
+        function hideLoader(loaderId) {
+            const loader = document.getElementById(loaderId);
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 300);
+            }
         }
 
         function refreshFolder() {
@@ -300,16 +496,52 @@
 
         function toggleView() {
             currentView = (currentView === "grid") ? "list" : "grid";
+            document.getElementById('folder-loader').style.display = 'flex';
+            document.getElementById('folder-loader').style.opacity = '1';
             refreshFolder();
+            showToast("Archive view updated");
         }
 
-        // Assisted Touch / Draggable Floating Widget Implementation for Touch & Mouse
+        /* GCash Modal & Clipboard Features */
+        function openGcashModal() {
+            document.getElementById('gcash-modal').classList.add('active');
+        }
+
+        function closeGcashModal(e) {
+            if (!e || e.target.id === 'gcash-modal' || e.target.tagName === 'BUTTON') {
+                document.getElementById('gcash-modal').classList.remove('active');
+            }
+        }
+
+        function copyGcashNumber() {
+            const num = "09634579441";
+            navigator.clipboard.writeText(num).then(() => {
+                showToast("GCash number copied to clipboard!");
+                closeGcashModal();
+            }).catch(err => {
+                showToast("Failed to copy number");
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        /* Assisted Touch / Draggable Floating Widget Implementation */
         function initDraggableGcash() {
             const el = document.getElementById('gcash-float-banner');
             let isDragging = false;
+            let hasMoved = false;
             let startX, startY, initialX, initialY;
 
             function dragStart(e) {
+                hasMoved = false;
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
                 
@@ -320,7 +552,6 @@
                 initialX = rect.left;
                 initialY = rect.top;
                 
-                // Clear out bottom/right constraints so left/top positioning works smoothly
                 el.style.bottom = 'auto';
                 el.style.right = 'auto';
                 el.style.left = initialX + 'px';
@@ -331,29 +562,35 @@
 
             function drag(e) {
                 if (!isDragging) return;
-                e.preventDefault();
-
+                
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
                 const dx = clientX - startX;
                 const dy = clientY - startY;
 
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                    hasMoved = true;
+                    e.preventDefault();
+                }
+
                 let newX = initialX + dx;
                 let newY = initialY + dy;
 
-                // Screen boundaries clamping
-                const maxX = window.innerWidth - el.offsetWidth - 10;
-                const maxY = window.innerHeight - el.offsetHeight - 10;
+                const maxX = window.innerWidth - el.offsetWidth - 15;
+                const maxY = window.innerHeight - el.offsetHeight - 15;
 
-                newX = Math.max(10, Math.min(newX, maxX));
-                newY = Math.max(70, Math.min(newY, maxY)); // Keep below header header
+                newX = Math.max(15, Math.min(newX, maxX));
+                newY = Math.max(15, Math.min(newY, maxY));
 
                 el.style.left = newX + 'px';
                 el.style.top = newY + 'px';
             }
 
-            function dragEnd() {
+            function dragEnd(e) {
+                if (isDragging && !hasMoved) {
+                    openGcashModal();
+                }
                 isDragging = false;
             }
 

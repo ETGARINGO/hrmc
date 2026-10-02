@@ -6,7 +6,6 @@
     <title>HRMSC | Human Resource Management & Course Portal</title>
     
     <link rel="icon" type="image/png" href="PIN LOGO.png">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <style>
         :root {
@@ -16,7 +15,7 @@
             --accent-gold: #d97706;
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
-            --glass-bg: rgba(30, 41, 59, 0.85);
+            --glass-bg: rgba(30, 41, 59, 0.95);
             --border-subtle: rgba(148, 163, 184, 0.2);
             --shadow-elevation: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
         }
@@ -68,61 +67,20 @@
         }
         #folder-toggle-btn:hover { background: var(--corporate-blue); border-color: var(--corporate-blue); }
 
-        #map {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; filter: brightness(0.35) contrast(1.1) saturate(0.3);
-            transition: filter 2s ease-in-out;
-        }
-
-        /* CUSTOM PROFESSIONAL MAP TOOLTIP */
-        .corporate-label {
-            background: var(--corporate-slate) !important;
-            border: 1px solid var(--corporate-blue) !important;
-            color: #fff !important;
-            font-family: inherit !important;
-            font-weight: 600 !important;
-            font-size: 11px !important;
-            border-radius: 4px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            padding: 6px 12px;
-        }
-        .leaflet-tooltip-top:before { border-top-color: var(--corporate-blue) !important; }
-
-        /* PROFESSIONAL FOCUS RETICLE / RADAR */
-        #reticle {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 220px; height: 220px;
-            border: 2px dashed rgba(56, 189, 248, 0.25);
-            border-radius: 50%; z-index: 60;
-            pointer-events: none; opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        #hud-data {
-            position: absolute; bottom: 20px; right: 20px; z-index: 2500;
-            font-size: 11px; text-align: right; line-height: 1.6;
-            pointer-events: none; background: rgba(15, 23, 42, 0.8);
-            padding: 12px 18px; border-radius: 8px; border: 1px solid var(--border-subtle);
-            backdrop-filter: blur(8px); color: var(--text-muted);
-        }
-
         #command-interface {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1200; display: none; opacity: 0;
-            background-color: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            transition: opacity 1s ease-in-out;
+            z-index: 1200; display: block; opacity: 1;
+            background-color: var(--corporate-navy);
         }
 
         #logo-blend-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 1; opacity: 0.08;
+            object-fit: cover; z-index: 1; opacity: 0.05;
             mix-blend-mode: luminosity; pointer-events: none;
         }
 
         .viewport-grid {
-            position: absolute; top: 95px; left: 2%; width: 96%; height: 82%;
+            position: absolute; top: 95px; left: 2%; width: 96%; height: 85%;
             display: grid; 
             grid-template-columns: 1fr 1fr;
             gap: 20px; z-index: 10;
@@ -192,17 +150,6 @@
 
     <button id="folder-toggle-btn" onclick="toggleFolder()">[ ARCHIVE: VISIBLE ]</button>
 
-    <div id="map"></div>
-    <div id="reticle"></div>
-    
-    <div id="hud-data">
-        <span style="color:#38bdf8; font-weight: 600;">// SYSTEM_STATUS: SECURE //</span><br>
-        INITIALIZATION: <span id="status-text" style="color:#fff">CONNECTING...</span><br>
-        ACTIVE SECTOR: <span id="current-coord" style="color:#fff">---</span><br>
-        DATABASE NODE: <span id="alert-status" style="color:#38bdf8">STANDBY</span><br>
-        CLOUD SYNC: <span id="sync-timer" style="color:#34d399">ONLINE</span>
-    </div>
-
     <div id="command-interface">
         <img src="BLEND.png" id="logo-blend-bg" alt="Background">
         
@@ -226,8 +173,6 @@
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <script>
         const GOOGLE_UPLINK = "https://script.google.com/macros/s/AKfycbyGKF5w3DeyNgy7VsQra02txkyci1I1EMekXqpVRXk6MaPAvOKlww1FblCIjDrYWILiQQ/exec";
         const DRIVE_FOLDER_ID = "1E5z6QNMmJFtM2xut38Ohul3PXZzCNFZy";
@@ -236,74 +181,10 @@
         let currentView = "grid"; 
         const getEmbedURL = (mode) => `https://drive.google.com/embeddedfolderview?id=${DRIVE_FOLDER_ID}#${mode}`;
 
-        const pinIcon = L.icon({
-            iconUrl: 'PIN LOGO.png',
-            iconSize: [34, 34],
-            iconAnchor: [17, 17],
-            popupAnchor: [0, -17]
-        });
-
-        const scanPoints = [
-            {n: "EXECUTIVE_HQ_HUB", p: [6.9210, 122.0790], z: 14},
-            {n: "HR_LEARNING_CENTER", p: [6.9300, 122.0600], z: 13},
-            {n: "DISTRICT_TRAINING_WING", p: [6.9100, 122.0900], z: 13},
-            {n: "RECORDS_MANAGEMENT_UNIT", p: [6.9250, 122.0750], z: 15},
-            {n: "HRMSC_COURSE_GATEWAY", p: [6.9200, 122.0700], z: 12}
-        ];
-
-        const map = L.map('map', { 
-            zoomControl: false, attributionControl: false,
-            dragging: false, scrollWheelZoom: false, doubleClickZoom: false
-        }).setView(scanPoints[0].p, 12);
-
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
-
-        const statusText = document.getElementById('status-text');
-        const hudCoord = document.getElementById('current-coord');
-        const alertStatus = document.getElementById('alert-status');
-        const reticle = document.getElementById('reticle');
-
-        async function runTacticalSequence() {
-            await new Promise(r => setTimeout(r, 800));
-            reticle.style.opacity = "1";
-            alertStatus.innerText = "VERIFYING CREDENTIALS";
-            
-            for (const point of scanPoints) {
-                statusText.innerText = `LOADING_${point.n}`;
-                hudCoord.innerText = `${point.p[0].toFixed(4)}N / ${point.p[1].toFixed(4)}E`;
-                
-                map.flyTo(point.p, point.z, { duration: 1.2 });
-                
-                L.marker(point.p, { icon: pinIcon })
-                    .addTo(map)
-                    .bindTooltip(point.n, {
-                        permanent: true,
-                        direction: 'top',
-                        className: 'corporate-label',
-                        offset: [0, -15]
-                    }).openTooltip();
-
-                await new Promise(r => setTimeout(r, 1400));
-            }
-            initializeCommandCenter();
-        }
-
         function initializeCommandCenter() {
-            const commandUI = document.getElementById('command-interface');
             const orderFrame = document.getElementById('order-frame');
-            
-            alertStatus.innerText = "SECURE";
-            statusText.innerText = "PORTAL_READY";
-            
             orderFrame.src = GOOGLE_UPLINK;
             refreshFolder();
-            
-            commandUI.style.display = "block";
-            setTimeout(() => {
-                commandUI.style.opacity = "1";
-                document.getElementById('map').style.filter = "brightness(0.15) blur(18px)";
-            }, 100);
-
             setInterval(refreshFolder, REFRESH_RATE);
         }
 
@@ -330,7 +211,7 @@
             refreshFolder();
         }
 
-        window.onload = runTacticalSequence;
+        window.onload = initializeCommandCenter;
     </script>
 </body>
 </html>

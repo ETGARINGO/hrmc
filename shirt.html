@@ -26,6 +26,8 @@
             overflow: hidden; background-color: var(--corporate-navy); 
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text-light);
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         /* CLEAN CORPORATE HEADER */
@@ -54,7 +56,7 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
             flex-shrink: 0;
-            display: none; /* Hidden on very small screens, shown via media query if space permits */
+            display: none;
         }
 
         @media (min-width: 600px) {
@@ -63,35 +65,56 @@
             #header-title { font-size: 15px; }
         }
 
-        /* FLOATING GCASH PAYMENT BANNER */
+        /* ASSISTED TOUCH / DRAGGABLE GCASH FLOATING WIDGET */
         #gcash-float-banner {
-            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-            z-index: 3000;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 4000;
             background: linear-gradient(135deg, #0056b3, var(--gcash-blue));
             color: #fff;
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: 0 8px 20px rgba(0, 125, 244, 0.4);
-            display: flex; align-items: center; gap: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 12px; font-weight: 600;
-            text-align: center;
-            animation: pulse-glow 3s infinite;
-            max-width: 90%;
-            box-sizing: border-box;
+            padding: 12px 18px;
+            border-radius: 35px;
+            box-shadow: 0 10px 25px rgba(0, 125, 244, 0.5);
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 12px; 
+            font-weight: 600;
+            cursor: grab;
+            touch-action: none;
+            transition: box-shadow 0.2s ease, transform 0.1s ease;
+        }
+
+        #gcash-float-banner:active {
+            cursor: grabbing;
+            transform: scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 125, 244, 0.7);
         }
 
         .gcash-icon {
-            background: #fff; color: var(--gcash-blue);
-            width: 24px; height: 24px; border-radius: 50%;
+            background: #fff; 
+            color: var(--gcash-blue);
+            width: 26px; height: 26px; 
+            border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 11px; flex-shrink: 0;
+            font-weight: 900; font-size: 12px; flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(0, 125, 244, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 125, 244, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 125, 244, 0); }
+        .drag-handle-dots {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            opacity: 0.6;
+            margin-left: 2px;
+        }
+
+        .drag-handle-dots span {
+            width: 3px; height: 3px;
+            background: #fff;
+            border-radius: 50%;
         }
 
         #folder-toggle-btn {
@@ -120,9 +143,9 @@
             mix-blend-mode: luminosity; pointer-events: none;
         }
 
-        /* MOBILE FIRST LAYOUT: Default to single full-screen form view with toggle to archive */
+        /* Mobile First Layout */
         .viewport-grid {
-            position: absolute; top: 78px; left: 2%; width: 96%; height: calc(100% - 150px);
+            position: absolute; top: 78px; left: 2%; width: 96%; height: calc(100% - 95px);
             display: grid; 
             grid-template-columns: 1fr 0fr;
             gap: 0; z-index: 10;
@@ -151,7 +174,7 @@
 
         .pane-header {
             background: rgba(30, 41, 59, 0.95); padding: 10px 15px;
-            font-size: 10px; font-weight: 700; letter-icon: 1px; color: var(--text-light);
+            font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-light);
             border-bottom: 1px solid var(--border-subtle);
             display: flex; justify-content: space-between; align-items: center;
         }
@@ -171,14 +194,13 @@
 
         iframe { width: 100%; height: 100%; border: none; background: transparent; }
 
-        /* Tablet & Desktop Adjustments */
+        /* Tablet & Desktop Layout Adjustment */
         @media (min-width: 900px) {
             .viewport-grid { top: 95px; height: 82%; grid-template-columns: 1fr 1fr; gap: 20px; }
             .viewport-grid.hide-archive { grid-template-columns: 1fr 0fr; gap: 0; }
             #folder-pane { opacity: 1; transform: scaleX(1); pointer-events: auto; }
             .viewport-grid.hide-archive #folder-pane { opacity: 0; transform: scaleX(0); pointer-events: none; }
             #folder-toggle-btn { right: 30px; top: 90px; padding: 10px 16px; font-size: 11px; }
-            #gcash-float-banner { bottom: 20px; font-size: 13px; padding: 12px 24px; }
         }
     </style>
 </head>
@@ -195,10 +217,16 @@
         <div class="header-badge">Enterprise Portal v4.2</div>
     </header>
 
-    <!-- Floating GCash Payment Info Banner -->
+    <!-- ASSISTED TOUCH MOVABLE GCASH PAYMENT WIDGET -->
     <div id="gcash-float-banner">
         <div class="gcash-icon">G</div>
-        <div>GCASH PAYMENT: <strong>0927-173-2906</strong> (ELRG)</div>
+        <div>
+            <div style="font-size: 9px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">GCASH PAYMENT (ELRG)</div>
+            <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.5px;">0927-173-2906</div>
+        </div>
+        <div class="drag-handle-dots">
+            <span></span><span></span><span></span>
+        </div>
     </div>
 
     <button id="folder-toggle-btn" onclick="toggleFolder()">[ ARCHIVE: SHOW ]</button>
@@ -241,6 +269,7 @@
             orderFrame.src = GOOGLE_UPLINK;
             refreshFolder();
             setInterval(refreshFolder, REFRESH_RATE);
+            initDraggableGcash();
         }
 
         function refreshFolder() {
@@ -256,8 +285,6 @@
         function toggleFolder() {
             const grid = document.getElementById('main-grid');
             const btn = document.getElementById('folder-toggle-btn');
-            
-            // Check screen width to determine mode behavior
             const isDesktop = window.innerWidth >= 900;
             
             if (isDesktop) {
@@ -274,6 +301,69 @@
         function toggleView() {
             currentView = (currentView === "grid") ? "list" : "grid";
             refreshFolder();
+        }
+
+        // Assisted Touch / Draggable Floating Widget Implementation for Touch & Mouse
+        function initDraggableGcash() {
+            const el = document.getElementById('gcash-float-banner');
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+
+            function dragStart(e) {
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                
+                startX = clientX;
+                startY = clientY;
+                
+                const rect = el.getBoundingClientRect();
+                initialX = rect.left;
+                initialY = rect.top;
+                
+                // Clear out bottom/right constraints so left/top positioning works smoothly
+                el.style.bottom = 'auto';
+                el.style.right = 'auto';
+                el.style.left = initialX + 'px';
+                el.style.top = initialY + 'px';
+
+                isDragging = true;
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                const dx = clientX - startX;
+                const dy = clientY - startY;
+
+                let newX = initialX + dx;
+                let newY = initialY + dy;
+
+                // Screen boundaries clamping
+                const maxX = window.innerWidth - el.offsetWidth - 10;
+                const maxY = window.innerHeight - el.offsetHeight - 10;
+
+                newX = Math.max(10, Math.min(newX, maxX));
+                newY = Math.max(70, Math.min(newY, maxY)); // Keep below header header
+
+                el.style.left = newX + 'px';
+                el.style.top = newY + 'px';
+            }
+
+            function dragEnd() {
+                isDragging = false;
+            }
+
+            el.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            el.addEventListener('touchstart', dragStart, {passive: false});
+            document.addEventListener('touchmove', drag, {passive: false});
+            document.addEventListener('touchend', dragEnd);
         }
 
         window.onload = initializeCommandCenter;

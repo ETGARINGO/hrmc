@@ -3,120 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRMSC | SHIRT_DISPATCH</title>
+    <title>HRMSC | Human Resource Management & Course Portal</title>
     
     <link rel="icon" type="image/png" href="PIN LOGO.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <style>
         :root {
-            --tactical-blue: #00d4ff;
-            --accent-green: #00ff66;
-            --bg-black: #00050a;
-            --warning-red: rgba(255, 51, 51, 0.8);
-            --glass: rgba(0, 20, 40, 0.7);
-            --ui-glow: 0 0 15px rgba(0, 212, 255, 0.4);
+            --corporate-navy: #0f172a;
+            --corporate-slate: #1e293b;
+            --corporate-blue: #0284c7;
+            --accent-gold: #d97706;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(30, 41, 59, 0.85);
+            --border-subtle: rgba(148, 163, 184, 0.2);
+            --shadow-elevation: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
         }
 
         body, html { 
             margin: 0; padding: 0; height: 100%; width: 100%; 
-            overflow: hidden; background-color: var(--bg-black); 
-            font-family: 'Courier New', Courier, monospace;
-            color: var(--accent-green);
+            overflow: hidden; background-color: var(--corporate-navy); 
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-light);
         }
 
-        /* SCANLINE CRT EFFECT */
-        body::before {
-            content: "";
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 3px 100%;
-            pointer-events: none; z-index: 3000; opacity: 0.3;
-        }
-
-        #tactical-header {
-            position: absolute; top: 0; left: 0; width: 100%; height: 60px;
-            background: linear-gradient(to bottom, var(--bg-black), transparent);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
-            display: flex; align-items: center; padding: 0 30px;
+        /* CLEAN CORPORATE HEADER */
+        #corporate-header {
+            position: absolute; top: 0; left: 0; width: 100%; height: 70px;
+            background: var(--corporate-slate);
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 30px;
             z-index: 1100; box-sizing: border-box;
-            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        #header-logo { height: 38px; margin-right: 15px; filter: drop-shadow(0 0 8px var(--tactical-blue)); }
-        #header-title { font-weight: bold; letter-spacing: 4px; font-size: 14px; color: #fff; text-shadow: 0 0 10px var(--tactical-blue); }
+        .header-brand { display: flex; align-items: center; }
+        #header-logo { height: 42px; margin-right: 15px; border-radius: 6px; }
+        #header-title { font-weight: 700; letter-spacing: 1px; font-size: 16px; color: #fff; }
+        #header-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 1.5px;}
 
-        #folder-toggle-btn {
-            position: fixed; right: 20px; top: 80px; z-index: 2000;
-            background: rgba(0, 20, 40, 0.8);
-            border: 1px solid var(--tactical-blue);
-            color: var(--tactical-blue);
-            padding: 10px; cursor: pointer;
-            font-family: inherit; font-size: 10px; font-weight: bold;
-            box-shadow: var(--ui-glow);
-            transition: all 0.3s ease;
+        .header-badge {
+            background: rgba(2, 132, 199, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
         }
-        #folder-toggle-btn:hover { background: var(--tactical-blue); color: #000; }
+
+        #folder-toggle-btn {
+            position: fixed; right: 30px; top: 90px; z-index: 2000;
+            background: var(--corporate-slate);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-light);
+            padding: 10px 16px; cursor: pointer;
+            font-family: inherit; font-size: 11px; font-weight: 600;
+            border-radius: 6px;
+            box-shadow: var(--shadow-elevation);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+        #folder-toggle-btn:hover { background: var(--corporate-blue); border-color: var(--corporate-blue); }
 
         #map {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; filter: brightness(0.5) contrast(1.2) saturate(0.2) hue-rotate(170deg);
-            transition: filter 3s ease-in-out;
+            z-index: 1; filter: brightness(0.35) contrast(1.1) saturate(0.3);
+            transition: filter 2s ease-in-out;
         }
 
-        /* CUSTOM TOOLTIP STYLES */
-        .tactical-label {
-            background: rgba(0, 5, 10, 0.8) !important;
-            border: 1px solid var(--accent-green) !important;
-            color: var(--accent-green) !important;
-            font-family: 'Courier New', monospace !important;
-            font-weight: bold !important;
-            font-size: 12px !important;
-            text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
-            padding: 2px 8px;
+        /* CUSTOM PROFESSIONAL MAP TOOLTIP */
+        .corporate-label {
+            background: var(--corporate-slate) !important;
+            border: 1px solid var(--corporate-blue) !important;
+            color: #fff !important;
+            font-family: inherit !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            padding: 6px 12px;
         }
-        .leaflet-tooltip-top:before { border-top-color: var(--accent-green) !important; }
+        .leaflet-tooltip-top:before { border-top-color: var(--corporate-blue) !important; }
 
+        /* PROFESSIONAL FOCUS RETICLE / RADAR */
         #reticle {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 250px; height: 250px;
-            border: 1px solid rgba(0, 255, 102, 0.2);
+            width: 220px; height: 220px;
+            border: 2px dashed rgba(56, 189, 248, 0.25);
             border-radius: 50%; z-index: 60;
             pointer-events: none; opacity: 0;
             transition: opacity 1s ease;
         }
-        #reticle::before { content: ""; position: absolute; width: 140%; height: 1px; top: 50%; left: -20%; background: linear-gradient(90deg, transparent, var(--accent-green), transparent); }
-        #reticle::after { content: ""; position: absolute; width: 1px; height: 140%; left: 50%; top: -20%; background: linear-gradient(180deg, transparent, var(--accent-green), transparent); }
 
         #hud-data {
             position: absolute; bottom: 20px; right: 20px; z-index: 2500;
             font-size: 11px; text-align: right; line-height: 1.6;
-            pointer-events: none; text-shadow: 0 0 5px var(--accent-green);
+            pointer-events: none; background: rgba(15, 23, 42, 0.8);
+            padding: 12px 18px; border-radius: 8px; border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(8px); color: var(--text-muted);
         }
 
         #command-interface {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1200; display: none; opacity: 0;
-            background-color: var(--bg-black);
-            transition: opacity 2s ease-in-out;
+            background-color: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            transition: opacity 1s ease-in-out;
         }
 
         #logo-blend-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 1; opacity: 0.2;
-            mix-blend-mode: screen; pointer-events: none;
-            animation: pulseBackground 8s infinite alternate ease-in-out;
+            object-fit: cover; z-index: 1; opacity: 0.08;
+            mix-blend-mode: luminosity; pointer-events: none;
         }
 
         .viewport-grid {
-            position: absolute; top: 80px; left: 2%; width: 96%; height: 85%;
+            position: absolute; top: 95px; left: 2%; width: 96%; height: 82%;
             display: grid; 
             grid-template-columns: 1fr 1fr;
             gap: 20px; z-index: 10;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .viewport-grid.hide-archive {
@@ -126,8 +136,11 @@
 
         .pane {
             display: flex; flex-direction: column;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            background: var(--glass); border-radius: 4px; overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            background: var(--glass-bg); 
+            border-radius: 10px; overflow: hidden;
+            box-shadow: var(--shadow-elevation);
+            backdrop-filter: blur(10px);
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
@@ -137,54 +150,57 @@
         }
 
         .pane-header {
-            background: rgba(0, 212, 255, 0.1); padding: 8px 15px;
-            font-size: 10px; letter-spacing: 2px; color: var(--tactical-blue);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(30, 41, 59, 0.95); padding: 12px 20px;
+            font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-light);
+            border-bottom: 1px solid var(--border-subtle);
             display: flex; justify-content: space-between; align-items: center;
         }
 
         .sync-indicator {
-            font-size: 8px; color: var(--accent-green);
-            animation: blink 2s infinite;
+            font-size: 10px; color: #38bdf8; font-weight: 500;
+            display: flex; align-items: center; gap: 6px;
         }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         .view-toggle-btn {
-            background: rgba(0, 212, 255, 0.2);
-            border: 1px solid var(--tactical-blue);
-            color: #fff; padding: 2px 8px; font-size: 9px;
-            cursor: pointer; transition: all 0.3s;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38bdf8; padding: 4px 10px; font-size: 10px; font-weight: 600;
+            border-radius: 4px; cursor: pointer; transition: all 0.2s;
         }
+        .view-toggle-btn:hover { background: #38bdf8; color: #0f172a; }
 
         iframe { width: 100%; height: 100%; border: none; background: transparent; }
 
-        @media (max-width: 800px) {
-            .viewport-grid { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; top: 70px; height: 88%; }
+        @media (max-width: 900px) {
+            .viewport-grid { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; top: 80px; height: 88%; }
             .viewport-grid.hide-archive { grid-template-rows: 1fr 0fr; }
         }
-
-        @keyframes pulseBackground { from { transform: scale(1); opacity: 0.15; } to { transform: scale(1.05); opacity: 0.3; } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <header id="tactical-header">
-        <img src="PIN LOGO.png" id="header-logo" alt="HRMSC">
-        <div id="header-title">HRMSC_SHIRT | CONSOLE</div>
+    <header id="corporate-header">
+        <div class="header-brand">
+            <img src="PIN LOGO.png" id="header-logo" alt="HRMSC">
+            <div>
+                <div id="header-title">HRMSC | EXECUTIVE LEARNING & RECORDS</div>
+                <div id="header-subtitle">Human Resource Management & Professional Development Course Portal</div>
+            </div>
+        </div>
+        <div class="header-badge">Enterprise Portal v4.2</div>
     </header>
 
-    <button id="folder-toggle-btn" onclick="toggleFolder()">[ RECEIPT: VISIBLE ]</button>
+    <button id="folder-toggle-btn" onclick="toggleFolder()">[ ARCHIVE: VISIBLE ]</button>
 
     <div id="map"></div>
     <div id="reticle"></div>
     
     <div id="hud-data">
-        <span style="color:rgba(0,255,102,0.5)">// HRMSC_DISPATCH_v4.2 //</span><br>
-        STATUS: <span id="status-text" style="color:#fff">BOOTING...</span><br>
-        TARGET: <span id="current-coord" style="color:#fff">---</span><br>
-        ALARM: <span id="alert-status" style="color:#fff">IDLE</span><br>
-        SYNC: <span id="sync-timer" style="color:var(--accent-green)">ACTIVE</span>
+        <span style="color:#38bdf8; font-weight: 600;">// SYSTEM_STATUS: SECURE //</span><br>
+        INITIALIZATION: <span id="status-text" style="color:#fff">CONNECTING...</span><br>
+        ACTIVE SECTOR: <span id="current-coord" style="color:#fff">---</span><br>
+        DATABASE NODE: <span id="alert-status" style="color:#38bdf8">STANDBY</span><br>
+        CLOUD SYNC: <span id="sync-timer" style="color:#34d399">ONLINE</span>
     </div>
 
     <div id="command-interface">
@@ -193,16 +209,17 @@
         <div class="viewport-grid" id="main-grid">
             <div class="pane" id="input-pane">
                 <div class="pane-header">
-                    <span>> SHIRT_ORDER_DATA_INPUT</span>
-                    <span style="color: var(--accent-green);">ONLINE</span>
+                    <span>PORTAL: COURSE REGISTRATION & ENROLLMENT</span>
+                    <span style="color: #34d399; font-size: 10px;">● SECURE CONNECTION</span>
                 </div>
                 <iframe id="order-frame" src="about:blank"></iframe>
             </div>
 
             <div class="pane" id="folder-pane">
                 <div class="pane-header">
-                    <span>> SHIRT_ARCHIVE_FILE <span class="sync-indicator" id="sync-icon">● LIVE_SYNC</span></span>
-                    <button class="view-toggle-btn" onclick="toggleView()">TOGGLE_VIEWMODE</button>
+                    <span>HRMSC RECORDS & MODULE ARCHIVE</span>
+                    <span class="sync-indicator" id="sync-icon"><span>●</span> LIVE SYNC</span>
+                    <button class="view-toggle-btn" onclick="toggleView()">TOGGLE VIEW</button>
                 </div>
                 <iframe id="folder-frame" src="about:blank"></iframe>
             </div>
@@ -221,25 +238,23 @@
 
         const pinIcon = L.icon({
             iconUrl: 'PIN LOGO.png',
-            iconSize: [36, 36],
-            iconAnchor: [18, 18],
-            popupAnchor: [0, -18]
+            iconSize: [34, 34],
+            iconAnchor: [17, 17],
+            popupAnchor: [0, -17]
         });
 
         const scanPoints = [
-            {n: "HR_UNIT_SULU", p: [6.0, 121.0], z: 10},
-            {n: "ISABELA_OFFICE", p: [6.70, 121.97], z: 12},
-            {n: "HRMSC_MAIN_HQ", p: [6.92, 122.07], z: 14},
-            {n: "SIBUGAY_STATION", p: [7.78, 122.58], z: 11},
-            {n: "ZN_DISTRICT", p: [8.15, 123.00], z: 10},
-            {n: "ZS_DISTRICT", p: [7.90, 123.40], z: 10},
-            {n: "SHIRT_DISTRIBUTION_LOCK", p: [7.7, 122.8], z: 8}
+            {n: "EXECUTIVE_HQ_HUB", p: [6.9210, 122.0790], z: 14},
+            {n: "HR_LEARNING_CENTER", p: [6.9300, 122.0600], z: 13},
+            {n: "DISTRICT_TRAINING_WING", p: [6.9100, 122.0900], z: 13},
+            {n: "RECORDS_MANAGEMENT_UNIT", p: [6.9250, 122.0750], z: 15},
+            {n: "HRMSC_COURSE_GATEWAY", p: [6.9200, 122.0700], z: 12}
         ];
 
         const map = L.map('map', { 
             zoomControl: false, attributionControl: false,
             dragging: false, scrollWheelZoom: false, doubleClickZoom: false
-        }).setView(scanPoints[0].p, 8);
+        }).setView(scanPoints[0].p, 12);
 
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
 
@@ -249,13 +264,12 @@
         const reticle = document.getElementById('reticle');
 
         async function runTacticalSequence() {
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 800));
             reticle.style.opacity = "1";
-            alertStatus.innerText = "DATABASE_LOCK";
-            alertStatus.style.color = "#ff3333";
+            alertStatus.innerText = "VERIFYING CREDENTIALS";
             
             for (const point of scanPoints) {
-                statusText.innerText = `SYNCING_${point.n}`;
+                statusText.innerText = `LOADING_${point.n}`;
                 hudCoord.innerText = `${point.p[0].toFixed(4)}N / ${point.p[1].toFixed(4)}E`;
                 
                 map.flyTo(point.p, point.z, { duration: 1.2 });
@@ -265,11 +279,11 @@
                     .bindTooltip(point.n, {
                         permanent: true,
                         direction: 'top',
-                        className: 'tactical-label',
+                        className: 'corporate-label',
                         offset: [0, -15]
                     }).openTooltip();
 
-                await new Promise(r => setTimeout(r, 1500));
+                await new Promise(r => setTimeout(r, 1400));
             }
             initializeCommandCenter();
         }
@@ -278,9 +292,8 @@
             const commandUI = document.getElementById('command-interface');
             const orderFrame = document.getElementById('order-frame');
             
-            alertStatus.innerText = "ACTIVE";
-            alertStatus.style.color = "var(--accent-green)";
-            statusText.innerText = "UPLINK_ESTABLISHED";
+            alertStatus.innerText = "SECURE";
+            statusText.innerText = "PORTAL_READY";
             
             orderFrame.src = GOOGLE_UPLINK;
             refreshFolder();
@@ -288,7 +301,7 @@
             commandUI.style.display = "block";
             setTimeout(() => {
                 commandUI.style.opacity = "1";
-                document.getElementById('map').style.filter = "brightness(0.05) blur(25px)";
+                document.getElementById('map').style.filter = "brightness(0.15) blur(18px)";
             }, 100);
 
             setInterval(refreshFolder, REFRESH_RATE);
@@ -297,12 +310,10 @@
         function refreshFolder() {
             const folderFrame = document.getElementById('folder-frame');
             const syncIcon = document.getElementById('sync-icon');
-            syncIcon.innerText = "● SYNCING...";
-            syncIcon.style.color = "var(--tactical-blue)";
+            syncIcon.innerHTML = "<span>↻</span> SYNCING...";
             folderFrame.src = getEmbedURL(currentView);
             setTimeout(() => {
-                syncIcon.innerText = "● LIVE_SYNC";
-                syncIcon.style.color = "var(--accent-green)";
+                syncIcon.innerHTML = "<span>●</span> LIVE SYNC";
             }, 2000);
         }
 
@@ -311,8 +322,7 @@
             const btn = document.getElementById('folder-toggle-btn');
             grid.classList.toggle('hide-archive');
             const isHidden = grid.classList.contains('hide-archive');
-            btn.innerText = isHidden ? "[ RECEIPT: HIDDEN ]" : "[ RECEIPT: VISIBLE ]";
-            btn.style.borderColor = isHidden ? "var(--warning-red)" : "var(--tactical-blue)";
+            btn.innerText = isHidden ? "[ ARCHIVE: HIDDEN ]" : "[ ARCHIVE: VISIBLE ]";
         }
 
         function toggleView() {

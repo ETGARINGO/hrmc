@@ -3,1503 +3,288 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0f172a">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 
-<title>HRMSC | Official Shirt Order Form</title>
+<title>HRMSC | Records & Order Monitoring</title>
 
 <link rel="icon" type="image/png" href="PIN.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
 <style>
-:root {
-    --corporate-navy: #0f172a;
-    --corporate-slate: #1e293b;
-    --corporate-slate-light: #334155;
-    --corporate-blue: #0284c7;
-    --corporate-blue-hover: #0ea5e9;
-    --accent-gold: #d97706;
-    --gcash-blue: #007df4;
-    --success-green: #10b981;
-    --text-light: #f8fafc;
-    --text-muted: #94a3b8;
-    --glass-bg: rgba(30, 41, 59, 0.88);
-    --border-subtle: rgba(148, 163, 184, 0.15);
-    --shadow-elevation: 0 20px 60px rgba(0, 0, 0, .45);
-}
-
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    font-family: "Inter", Arial, sans-serif;
-    background: var(--corporate-navy);
-    color: var(--text-light);
-}
-
-body {
-    position: relative;
-}
-
-/* =========================
-   BACKGROUND
-========================= */
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -3;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(15, 23, 42, .98),
-            rgba(15, 23, 42, .94)
-        ),
-        url("BLEND.png") center / cover no-repeat;
-}
-
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    background:
-        radial-gradient(
-            circle at 15% 20%,
-            rgba(2, 132, 199, .10),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 85% 80%,
-            rgba(217, 119, 6, .08),
-            transparent 30%
-        );
-}
-
-/* =========================
-   LOADER
-========================= */
-
-#page-loader {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    background: #0f172a;
-    transition: opacity .35s ease, visibility .35s ease;
-}
-
-#page-loader.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.loader-ring {
-    width: 46px;
-    height: 46px;
-    border: 3px solid rgba(148, 163, 184, .15);
-    border-top-color: var(--corporate-blue);
-    border-right-color: var(--accent-gold);
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
-}
-
-.loader-text {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    color: var(--text-muted);
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* =========================
-   MAIN GRID
-========================= */
-
-.viewport-grid {
-    position: fixed;
-    inset: 12px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(360px, 42%);
-    gap: 12px;
-    transition: grid-template-columns .35s ease;
-}
-
-.viewport-grid.hide-archive {
-    grid-template-columns: 1fr 0fr;
-}
-
-.pane {
-    position: relative;
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid var(--border-subtle);
-    border-radius: 14px;
-    background: var(--glass-bg);
-    box-shadow: var(--shadow-elevation);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-}
-
-/* =========================
-   PANE HEADER
-========================= */
-
-.pane-header {
-    flex: 0 0 auto;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 12px 15px;
-    border-bottom: 1px solid var(--border-subtle);
-    background: rgba(15, 23, 42, .96);
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-
-.pane-header > span:first-child {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.sync-indicator {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #86efac;
-    font-size: 8px;
-    letter-spacing: .8px;
-}
-
-.sync-indicator span {
-    color: var(--success-green);
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
 
-    50% {
-        opacity: .35;
-    }
-}
-
-/* =========================
-   IFRAME
-========================= */
-
-.iframe-wrapper {
-    position: relative;
-    flex: 1 1 auto;
-    min-width: 0;
-    min-height: 0;
-    overflow: hidden;
-    background: #fff;
-}
-
-.iframe-wrapper iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    min-width: 100%;
-    min-height: 100%;
-    border: 0;
-    background: #fff;
-}
-
-/*
-   Google Sheet view-only frame
-*/
-.sheet-wrapper {
-    background: #fff;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.sheet-wrapper iframe {
-    width: 100%;
-    height: 100%;
-}
-
-/* =========================
-   IFRAME LOADER
-========================= */
-
-.iframe-loader {
-    position: absolute;
-    inset: 0;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    background: #fff;
-    color: #475569;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    transition: opacity .3s ease;
-    pointer-events: none;
-}
-
-.spinner {
-    width: 30px;
-    height: 30px;
-    border: 3px solid #e2e8f0;
-    border-top-color: var(--corporate-blue);
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-}
-
-/* =========================
-   SHEET BUTTON
-========================= */
-
-#folder-toggle-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 3000;
-    border: 1px solid rgba(217, 119, 6, .55);
-    border-radius: 7px;
-    padding: 9px 12px;
-    background: rgba(15, 23, 42, .94);
-    color: #fbbf24;
-    font-family: inherit;
-    font-size: 8px;
-    font-weight: 900;
-    letter-spacing: .7px;
-    cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, .3);
-    transition:
-        background .2s ease,
-        transform .2s ease,
-        border-color .2s ease;
-}
-
-#folder-toggle-btn:hover {
-    background: rgba(51, 65, 85, .96);
-    border-color: #f59e0b;
-    transform: translateY(-1px);
-}
-
-#folder-toggle-btn:active {
-    transform: scale(.96);
-}
-
-/* =========================
-   GCASH FLOATING BANNER
-========================= */
-
-#gcash-float-banner {
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    z-index: 5000;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 15px;
-    border: 1px solid rgba(0, 125, 244, .45);
-    border-radius: 10px;
-    background: rgba(0, 65, 135, .95);
-    color: #fff;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, .35);
-    cursor: grab;
-    user-select: none;
-    touch-action: none;
-    transition: box-shadow .2s ease;
-}
-
-#gcash-float-banner:active {
-    cursor: grabbing;
-}
-
-.gcash-icon {
-    width: 27px;
-    height: 27px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #fff;
-    color: var(--gcash-blue);
-    font-size: 10px;
-    font-weight: 900;
-}
-
-.gcash-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.gcash-title {
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: .7px;
-}
-
-.gcash-number {
-    font-size: 8px;
-    color: rgba(255,255,255,.8);
-    letter-spacing: .5px;
-}
-
-/* =========================
-   GCASH MODAL
-========================= */
-
-#gcash-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(2, 6, 23, .78);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}
-
-#gcash-modal.active {
-    display: flex;
-}
-
-.gcash-modal-card {
-    width: min(420px, 100%);
-    overflow: hidden;
-    border: 1px solid rgba(0, 125, 244, .35);
-    border-radius: 18px;
-    background: #fff;
-    color: #0f172a;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
-    animation: modalIn .22s ease;
-}
-
-@keyframes modalIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px) scale(.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.gcash-modal-top {
-    padding: 24px;
-    background: linear-gradient(135deg, #007df4, #0058b0);
-    color: #fff;
-}
-
-.gcash-modal-top small {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    opacity: .8;
-}
-
-.gcash-modal-top h2 {
-    margin: 0;
-    font-size: 25px;
-}
-
-.gcash-modal-body {
-    padding: 22px;
-}
-
-.gcash-account {
-    margin-bottom: 16px;
-    padding: 15px;
-    border-radius: 10px;
-    background: #f1f5f9;
-}
-
-.gcash-label {
-    margin-bottom: 5px;
-    color: #64748b;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-.gcash-value {
-    color: #0f172a;
-    font-size: 17px;
-    font-weight: 900;
-}
-
-.gcash-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 9px;
-}
-
-.gcash-actions button {
-    min-height: 44px;
-    border: 0;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 10px;
-    font-weight: 900;
-    cursor: pointer;
-}
-
-.copy-btn {
-    background: var(--gcash-blue);
-    color: #fff;
-}
-
-.close-btn {
-    background: #e2e8f0;
-    color: #334155;
-}
-
-/* =========================
-   TOAST
-========================= */
-
-#toast {
-    position: fixed;
-    left: 50%;
-    bottom: 25px;
-    z-index: 20000;
-    transform: translate(-50%, 20px);
-    opacity: 0;
-    pointer-events: none;
-    padding: 10px 16px;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 8px;
-    background: rgba(15, 23, 42, .96);
-    color: #fff;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: .5px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    transition: opacity .25s ease, transform .25s ease;
-}
-
-#toast.show {
-    opacity: 1;
-    transform: translate(-50%, 0);
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 899px) {
-
-    body,
-    html {
+    html,
+    body {
+        width: 100%;
+        height: 100%;
         overflow: hidden;
+        background: #0f172a;
+        font-family: Arial, Helvetica, sans-serif;
     }
 
-    .viewport-grid {
-        inset: 8px;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 0fr;
-        gap: 8px;
+    body {
+        display: flex;
+        flex-direction: column;
     }
 
-    .viewport-grid.show-archive {
-        grid-template-rows: 1fr 1fr;
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+        flex: 0 0 auto;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        background: #0f172a;
+        border-bottom: 1px solid rgba(255,255,255,.12);
+        color: #fff;
+        z-index: 10;
     }
 
-    .pane {
+    .title {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+        color: #86efac;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .8px;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 10px rgba(16,185,129,.7);
+    }
+
+    /* =========================
+       SHEET CONTAINER
+    ========================= */
+
+    .sheet-container {
+        position: relative;
+        flex: 1 1 auto;
         min-width: 0;
         min-height: 0;
-        border-radius: 10px;
+        width: 100%;
+        overflow: hidden;
+        background: #fff;
     }
 
-    #folder-pane {
+    .sheet-container iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: #fff;
+    }
+
+    /* =========================
+       LOADER
+    ========================= */
+
+    .loader {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: #fff;
+        color: #475569;
+        transition: opacity .3s ease;
+    }
+
+    .loader.hidden {
         opacity: 0;
-        transform: scaleY(0);
-        transform-origin: bottom;
         pointer-events: none;
-        transition:
-            opacity .3s ease,
-            transform .3s ease;
     }
 
-    .show-archive #folder-pane {
-        opacity: 1;
-        transform: scaleY(1);
-        pointer-events: auto;
+    .spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid #e2e8f0;
+        border-top-color: #0284c7;
+        border-radius: 50%;
+        animation: spin .75s linear infinite;
     }
 
-    .pane-header {
-        min-height: 42px;
-        padding: 9px 11px;
-        font-size: 8px;
+    .loader-text {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
     }
 
-    .sync-indicator {
-        font-size: 7px;
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
     }
 
-    #folder-toggle-btn {
-        top: 9px;
-        right: 9px;
-        padding: 8px 10px;
-        font-size: 7px;
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+        .header {
+            height: 44px;
+            padding: 0 11px;
+        }
+
+        .title {
+            max-width: 72%;
+            font-size: 9px;
+            letter-spacing: .6px;
+        }
+
+        .status {
+            font-size: 7px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+        }
     }
 
-    #gcash-float-banner {
-        right: 10px;
-        bottom: 10px;
-        padding: 9px 11px;
-        gap: 8px;
-        transform: scale(.9);
-        transform-origin: bottom right;
+    @media (max-width: 380px) {
+
+        .header {
+            height: 40px;
+            padding: 0 9px;
+        }
+
+        .title {
+            font-size: 8px;
+        }
+
+        .status {
+            font-size: 6px;
+        }
     }
 
-    .gcash-icon {
-        width: 24px;
-        height: 24px;
+    /* =========================
+       LANDSCAPE MOBILE
+    ========================= */
+
+    @media (max-width: 900px) and (orientation: landscape) {
+
+        .header {
+            height: 38px;
+        }
+
+        .title {
+            font-size: 8px;
+        }
     }
-
-    .gcash-title {
-        font-size: 8px;
-    }
-
-    .gcash-number {
-        font-size: 7px;
-    }
-}
-
-/* =========================
-   SMALL MOBILE
-========================= */
-
-@media (max-width: 600px) {
-
-    .viewport-grid {
-        inset: 5px;
-        gap: 5px;
-    }
-
-    .viewport-grid.show-archive {
-        gap: 5px;
-    }
-
-    .pane {
-        border-radius: 8px;
-    }
-
-    .pane-header {
-        min-height: 38px;
-        padding: 8px 9px;
-        font-size: 7px;
-        letter-spacing: .5px;
-    }
-
-    .pane-header > span:first-child {
-        max-width: 68%;
-    }
-
-    .sync-indicator {
-        font-size: 6px;
-    }
-
-    #folder-toggle-btn {
-        top: 7px;
-        right: 7px;
-        padding: 7px 8px;
-        border-radius: 6px;
-        font-size: 6px;
-    }
-
-    #gcash-float-banner {
-        right: 7px;
-        bottom: 7px;
-        padding: 8px 10px;
-        transform: scale(.82);
-    }
-
-    .gcash-modal-card {
-        border-radius: 14px;
-    }
-
-    .gcash-modal-top {
-        padding: 20px;
-    }
-
-    .gcash-modal-top h2 {
-        font-size: 21px;
-    }
-
-    .gcash-modal-body {
-        padding: 17px;
-    }
-}
-
-/* =========================
-   EXTRA SMALL
-========================= */
-
-@media (max-width: 380px) {
-
-    .viewport-grid {
-        inset: 4px;
-        gap: 4px;
-    }
-
-    .pane-header {
-        min-height: 36px;
-        padding: 7px 8px;
-        font-size: 6.5px;
-    }
-
-    #folder-toggle-btn {
-        top: 6px;
-        right: 6px;
-        padding: 6px 7px;
-        font-size: 6px;
-    }
-
-    #gcash-float-banner {
-        right: 5px;
-        bottom: 5px;
-        transform: scale(.75);
-    }
-}
-
-/* =========================
-   LANDSCAPE MOBILE
-========================= */
-
-@media (max-width: 899px) and (orientation: landscape) {
-
-    .viewport-grid.show-archive {
-        grid-template-rows: 1fr 1fr;
-    }
-
-    .pane-header {
-        min-height: 34px;
-        padding: 6px 9px;
-    }
-
-    #gcash-float-banner {
-        bottom: 6px;
-    }
-}
-
-/* =========================
-   REDUCED MOTION
-========================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important;
-    }
-}
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     PAGE LOADER
-========================= -->
+<!-- HEADER -->
+<header class="header">
 
-<div id="page-loader">
-    <div class="loader-ring"></div>
-    <div class="loader-text">HRMSC COMMAND CENTER</div>
-</div>
+    <div class="title">
+        HRMSC | RECORDS & ORDER MONITORING
+    </div>
 
-<!-- =========================
-     SHEET TOGGLE
-========================= -->
+    <div class="status">
+        <span class="status-dot"></span>
+        VIEW ONLY
+    </div>
 
-<button
-    id="folder-toggle-btn"
-    type="button"
-    onclick="toggleFolder()">
-    [ SHEET: VISIBLE ]
-</button>
+</header>
 
-<!-- =========================
-     MAIN CONTENT
-========================= -->
 
-<main
-    class="viewport-grid"
-    id="main-grid">
+<!-- GOOGLE SHEET ONLY -->
+<main class="sheet-container">
 
-    <!-- =====================
-         ORDER FORM
-    ====================== -->
+    <div class="loader" id="sheet-loader">
 
-    <section
-        class="pane"
-        id="order-pane">
+        <div class="spinner"></div>
 
-        <div class="pane-header">
-            <span>HRMSC | OFFICIAL SHIRT ORDER FORM</span>
-
-            <span class="sync-indicator">
-                <span>●</span>
-                ONLINE
-            </span>
+        <div class="loader-text">
+            LOADING SHEET...
         </div>
 
-        <div class="iframe-wrapper">
+    </div>
 
-            <div
-                class="iframe-loader"
-                id="order-loader">
-
-                <div class="spinner"></div>
-
-                <span>
-                    LOADING ORDER FORM...
-                </span>
-
-            </div>
-
-            <iframe
-                id="order-frame"
-                title="HRMSC Official Shirt Order Form"
-                loading="eager"
-                allowfullscreen>
-            </iframe>
-
-        </div>
-
-    </section>
-
-    <!-- =====================
-         GOOGLE SHEET
-    ====================== -->
-
-    <section
-        class="pane"
-        id="folder-pane">
-
-        <div class="pane-header">
-
-            <span>
-                HRMSC RECORDS & ORDER MONITORING
-            </span>
-
-            <span class="sync-indicator">
-                <span>●</span>
-                VIEW ONLY
-            </span>
-
-        </div>
-
-        <div class="iframe-wrapper sheet-wrapper">
-
-            <div
-                class="iframe-loader"
-                id="folder-loader">
-
-                <div class="spinner"></div>
-
-                <span>
-                    LOADING RECORDS...
-                </span>
-
-            </div>
-
-            <iframe
-                id="folder-frame"
-                title="HRMSC Records and Order Monitoring"
-                loading="lazy"
-                allowfullscreen>
-            </iframe>
-
-        </div>
-
-    </section>
+    <iframe
+        id="sheet-frame"
+        title="HRMSC Records and Order Monitoring"
+        src="https://docs.google.com/spreadsheets/d/1Yud65cvfpplvVnVGUnFafRAyp_NOuK8RqAYWegFHj-c/edit?usp=sharing"
+        loading="eager"
+        allowfullscreen>
+    </iframe>
 
 </main>
 
-<!-- =========================
-     GCASH FLOATING BANNER
-========================= -->
-
-<div
-    id="gcash-float-banner"
-    title="Click to view GCash payment details">
-
-    <div class="gcash-icon">
-        G
-    </div>
-
-    <div class="gcash-content">
-
-        <div class="gcash-title">
-            GCASH (IBUMAAA)
-        </div>
-
-        <div class="gcash-number">
-            0963-457-9441
-        </div>
-
-    </div>
-
-</div>
-
-<!-- =========================
-     GCASH MODAL
-========================= -->
-
-<div
-    id="gcash-modal"
-    onclick="closeGcashModal(event)">
-
-    <div
-        class="gcash-modal-card"
-        onclick="event.stopPropagation()">
-
-        <div class="gcash-modal-top">
-
-            <small>
-                PAYMENT ACCOUNT
-            </small>
-
-            <h2>
-                GCASH
-            </h2>
-
-        </div>
-
-        <div class="gcash-modal-body">
-
-            <div class="gcash-account">
-
-                <div class="gcash-label">
-                    ACCOUNT NAME
-                </div>
-
-                <div class="gcash-value">
-                    IBUMAAA
-                </div>
-
-            </div>
-
-            <div class="gcash-account">
-
-                <div class="gcash-label">
-                    GCASH NUMBER
-                </div>
-
-                <div
-                    class="gcash-value"
-                    id="gcash-number">
-                    0963-457-9441
-                </div>
-
-            </div>
-
-            <div class="gcash-actions">
-
-                <button
-                    class="copy-btn"
-                    type="button"
-                    onclick="copyGcashNumber()">
-                    COPY NUMBER
-                </button>
-
-                <button
-                    class="close-btn"
-                    type="button"
-                    onclick="closeGcashModal()">
-                    CLOSE
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- =========================
-     TOAST
-========================= -->
-
-<div id="toast"></div>
 
 <script>
-/* =========================================================
-   CONFIGURATION
-========================================================= */
 
-const GOOGLE_UPLINK =
-    "https://script.google.com/macros/s/AKfycbz-hXlKJ0apWmd9NL01JYEVnaapU_5pmZtV236ZRMp5EK9fCHLqxXswks9aXVU3iA/exec";
-
-const GOOGLE_SHEET =
+const SHEET_URL =
     "https://docs.google.com/spreadsheets/d/1Yud65cvfpplvVnVGUnFafRAyp_NOuK8RqAYWegFHj-c/edit?usp=sharing";
 
+const frame =
+    document.getElementById("sheet-frame");
 
-/* =========================================================
-   INITIALIZATION
-========================================================= */
+const loader =
+    document.getElementById("sheet-loader");
 
-function initializeCommandCenter() {
 
-    const orderFrame =
-        document.getElementById("order-frame");
+frame.src = SHEET_URL;
 
-    const folderFrame =
-        document.getElementById("folder-frame");
 
-    if (orderFrame) {
-        orderFrame.src = GOOGLE_UPLINK;
+frame.addEventListener("load", function () {
 
-        orderFrame.addEventListener(
-            "load",
-            function () {
-                hideLoader("order-loader");
-            },
-            { once: true }
-        );
-    }
-
-    if (folderFrame) {
-        folderFrame.src = GOOGLE_SHEET;
-
-        folderFrame.addEventListener(
-            "load",
-            function () {
-                hideLoader("folder-loader");
-            },
-            { once: true }
-        );
-    }
-
-    initDraggableGcash();
+    loader.classList.add("hidden");
 
     setTimeout(function () {
-        hideLoader("page-loader");
-    }, 700);
-}
-
-
-/* =========================================================
-   LOADER
-========================================================= */
-
-function hideLoader(loaderId) {
-
-    const loader =
-        document.getElementById(loaderId);
-
-    if (!loader) return;
-
-    loader.style.opacity = "0";
-
-    setTimeout(function () {
-
         loader.style.display = "none";
+    }, 350);
 
-    }, 300);
-}
+});
 
 
-/* =========================================================
-   SHEET TOGGLE
-========================================================= */
+/*
+    Fallback:
+    Hide loader even if Google delays
+    the iframe load event.
+*/
 
-function toggleFolder() {
+setTimeout(function () {
 
-    const grid =
-        document.getElementById("main-grid");
+    if (loader) {
+        loader.classList.add("hidden");
 
-    const button =
-        document.getElementById("folder-toggle-btn");
-
-    if (!grid || !button) return;
-
-    const isDesktop =
-        window.innerWidth >= 900;
-
-    if (isDesktop) {
-
-        grid.classList.toggle("hide-archive");
-
-        const hidden =
-            grid.classList.contains("hide-archive");
-
-        button.innerText =
-            hidden
-                ? "[ SHEET: HIDDEN ]"
-                : "[ SHEET: VISIBLE ]";
-
-    } else {
-
-        grid.classList.toggle("show-archive");
-
-        const shown =
-            grid.classList.contains("show-archive");
-
-        button.innerText =
-            shown
-                ? "[ SHEET: HIDE ]"
-                : "[ SHEET: SHOW ]";
-    }
-}
-
-
-/* =========================================================
-   RESPONSIVE STATE
-========================================================= */
-
-window.addEventListener(
-    "resize",
-    function () {
-
-        const grid =
-            document.getElementById("main-grid");
-
-        const button =
-            document.getElementById("folder-toggle-btn");
-
-        if (!grid || !button) return;
-
-        if (window.innerWidth >= 900) {
-
-            const hidden =
-                grid.classList.contains("hide-archive");
-
-            button.innerText =
-                hidden
-                    ? "[ SHEET: HIDDEN ]"
-                    : "[ SHEET: VISIBLE ]";
-
-        } else {
-
-            const shown =
-                grid.classList.contains("show-archive");
-
-            button.innerText =
-                shown
-                    ? "[ SHEET: HIDE ]"
-                    : "[ SHEET: SHOW ]";
-        }
-
-    }
-);
-
-
-/* =========================================================
-   GCASH MODAL
-========================================================= */
-
-const gcashBanner =
-    document.getElementById("gcash-float-banner");
-
-const gcashModal =
-    document.getElementById("gcash-modal");
-
-
-if (gcashBanner) {
-
-    gcashBanner.addEventListener(
-        "click",
-        function () {
-
-            if (!isDragging) {
-                openGcashModal();
-            }
-
-        }
-    );
-
-}
-
-
-function openGcashModal() {
-
-    if (gcashModal) {
-        gcashModal.classList.add("active");
-    }
-
-}
-
-
-function closeGcashModal(event) {
-
-    if (
-        event &&
-        event.target !== gcashModal
-    ) {
-        return;
-    }
-
-    if (gcashModal) {
-        gcashModal.classList.remove("active");
-    }
-
-}
-
-
-/* =========================================================
-   COPY GCASH NUMBER
-========================================================= */
-
-function copyGcashNumber() {
-
-    const number =
-        "0963-457-9441";
-
-    if (
-        navigator.clipboard &&
-        navigator.clipboard.writeText
-    ) {
-
-        navigator.clipboard
-            .writeText(number)
-            .then(function () {
-
-                showToast(
-                    "GCASH NUMBER COPIED"
-                );
-
-            })
-            .catch(function () {
-
-                fallbackCopy(number);
-
-            });
-
-    } else {
-
-        fallbackCopy(number);
-
-    }
-}
-
-
-function fallbackCopy(text) {
-
-    const textarea =
-        document.createElement("textarea");
-
-    textarea.value = text;
-
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-
-    document.body.appendChild(textarea);
-
-    textarea.focus();
-    textarea.select();
-
-    try {
-
-        document.execCommand("copy");
-
-        showToast(
-            "GCASH NUMBER COPIED"
-        );
-
-    } catch (error) {
-
-        showToast(
-            "COPY FAILED"
-        );
-
-    }
-
-    document.body.removeChild(textarea);
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer = null;
-
-function showToast(message) {
-
-    const toast =
-        document.getElementById("toast");
-
-    if (!toast) return;
-
-    toast.innerText = message;
-
-    toast.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer =
         setTimeout(function () {
-
-            toast.classList.remove("show");
-
-        }, 2200);
-}
-
-
-/* =========================================================
-   DRAGGABLE GCASH
-========================================================= */
-
-let isDragging = false;
-
-let dragStarted = false;
-
-let startX = 0;
-let startY = 0;
-
-let originalLeft = 0;
-let originalTop = 0;
-
-
-function initDraggableGcash() {
-
-    const element =
-        document.getElementById(
-            "gcash-float-banner"
-        );
-
-    if (!element) return;
-
-    element.addEventListener(
-        "pointerdown",
-        startDrag,
-        { passive: false }
-    );
-
-    element.addEventListener(
-        "pointermove",
-        moveDrag,
-        { passive: false }
-    );
-
-    element.addEventListener(
-        "pointerup",
-        endDrag,
-        { passive: false }
-    );
-
-    element.addEventListener(
-        "pointercancel",
-        endDrag,
-        { passive: false }
-    );
-}
-
-
-function startDrag(event) {
-
-    const element =
-        document.getElementById(
-            "gcash-float-banner"
-        );
-
-    if (!element) return;
-
-    isDragging = false;
-    dragStarted = true;
-
-    startX = event.clientX;
-    startY = event.clientY;
-
-    const rect =
-        element.getBoundingClientRect();
-
-    originalLeft = rect.left;
-    originalTop = rect.top;
-
-    element.style.right = "auto";
-    element.style.bottom = "auto";
-    element.style.left = originalLeft + "px";
-    element.style.top = originalTop + "px";
-
-    try {
-        element.setPointerCapture(
-            event.pointerId
-        );
-    } catch (e) {}
-}
-
-
-function moveDrag(event) {
-
-    if (!dragStarted) return;
-
-    const element =
-        document.getElementById(
-            "gcash-float-banner"
-        );
-
-    if (!element) return;
-
-    const dx =
-        event.clientX - startX;
-
-    const dy =
-        event.clientY - startY;
-
-    if (
-        Math.abs(dx) > 5 ||
-        Math.abs(dy) > 5
-    ) {
-        isDragging = true;
+            loader.style.display = "none";
+        }, 350);
     }
 
-    if (!isDragging) return;
+}, 5000);
 
-    event.preventDefault();
-
-    const rect =
-        element.getBoundingClientRect();
-
-    const width = rect.width;
-    const height = rect.height;
-
-    let newLeft =
-        originalLeft + dx;
-
-    let newTop =
-        originalTop + dy;
-
-    const margin = 5;
-
-    newLeft =
-        Math.max(
-            margin,
-            Math.min(
-                window.innerWidth - width - margin,
-                newLeft
-            )
-        );
-
-    newTop =
-        Math.max(
-            margin,
-            Math.min(
-                window.innerHeight - height - margin,
-                newTop
-            )
-        );
-
-    element.style.left =
-        newLeft + "px";
-
-    element.style.top =
-        newTop + "px";
-}
-
-
-function endDrag(event) {
-
-    if (!dragStarted) return;
-
-    const element =
-        document.getElementById(
-            "gcash-float-banner"
-        );
-
-    if (element) {
-
-        try {
-            element.releasePointerCapture(
-                event.pointerId
-            );
-        } catch (e) {}
-
-    }
-
-    dragStarted = false;
-
-    setTimeout(function () {
-        isDragging = false;
-    }, 80);
-}
-
-
-/* =========================================================
-   ESC KEY
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (event.key === "Escape") {
-            closeGcashModal();
-        }
-
-    }
-);
-
-
-/* =========================================================
-   START
-========================================================= */
-
-if (
-    document.readyState === "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeCommandCenter
-    );
-
-} else {
-
-    initializeCommandCenter();
-
-}
 </script>
 
 </body>

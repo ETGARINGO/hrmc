@@ -1,6 +1,25 @@
-<iframe src="https://docs.google.com/spreadsheets/d/1Yud65cvfpplvVnVGUnFafRAyp_NOuK8RqAYWegFHj-c/pubhtml?widget=true&amp;headers=false" 
-        width="100%" 
-        height="600px" 
-        title="Google Spreadsheet Data View" 
-        loading="lazy">
-</iframe>
+<div class="sheet-container">
+  <iframe
+    src="https://docs.google.com/spreadsheets/d/e/YOUR_PUBLISHED_SHEET_ID/pubhtml?widget=true&headers=false"
+    frameborder="0"
+    scrolling="no">
+  </iframe>
+</div>
+
+<style>
+.sheet-container {
+  width: 100%;
+  height: 80vh;
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,.12);
+}
+
+.sheet-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+</style>

@@ -1,25 +1,24 @@
-<div class="sheet-container">
-  <iframe
-    src="https://docs.google.com/spreadsheets/d/e/YOUR_PUBLISHED_SHEET_ID/pubhtml?widget=true&headers=false"
-    frameborder="0"
-    scrolling="no">
-  </iframe>
+<!-- GOOGLE SHEETS VIEW-ONLY PANE -->
+<div class="pane" id="folder-pane">
+    <div class="pane-header">
+        <span>HRMSC RECORDS & ORDER MONITORING</span>
+        <span class="sync-indicator">
+            <span>●</span> VIEW ONLY
+        </span>
+    </div>
+
+    <div class="iframe-wrapper sheet-wrapper">
+        <div class="iframe-loader" id="folder-loader">
+            <div class="spinner"></div>
+            <span>LOADING RECORDS...</span>
+        </div>
+
+        <iframe
+            id="folder-frame"
+            src="https://docs.google.com/spreadsheets/d/1Yud65cvfpplvVnVGUnFafRAyp_NOuK8RqAYWegFHj-c/edit?usp=sharing"
+            title="HRMSC Records"
+            loading="lazy"
+            allowfullscreen>
+        </iframe>
+    </div>
 </div>
-
-<style>
-.sheet-container {
-  width: 100%;
-  height: 80vh;
-  min-height: 500px;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 4px 20px rgba(0,0,0,.12);
-}
-
-.sheet-container iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-</style>
